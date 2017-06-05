@@ -7,12 +7,24 @@
 //
 
 import UIKit
+import FSCalendar
 
-class ViewController: UIViewController {
+class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate {
 
+    @IBOutlet weak var fsCalendar: FSCalendar!
+    @IBOutlet weak var heightCalendar: NSLayoutConstraint!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        // config calendar
+        fsCalendar.select(Date())
+        fsCalendar.allowsMultipleSelection = false
+        fsCalendar.scope = .month
+        fsCalendar.backgroundColor = UIColor.clear.withAlphaComponent(0.12)
+        fsCalendar.calendarHeaderView.backgroundColor = UIColor.gray.withAlphaComponent(1)
+        fsCalendar.calendarWeekdayView.backgroundColor = UIColor.white.withAlphaComponent(1)
+        fsCalendar.placeholderType = FSCalendarPlaceholderType.fillHeadTail
     }
 
     override func didReceiveMemoryWarning() {
@@ -20,6 +32,13 @@ class ViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    
+    // MARK:- handle calendar
+    
+    func calendar(_ calendar: FSCalendar, boundingRectWillChange bounds: CGRect, animated: Bool) {
+        self.heightCalendar.constant = bounds.height
+        self.view.layoutIfNeeded()
+    }
 
 }
 
