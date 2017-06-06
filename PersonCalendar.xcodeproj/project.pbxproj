@@ -101,6 +101,21 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		691690F61EE71538009CB2E3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				FAD2E1011EE6F8CF00E99FC8 /* EventObject.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		691690F71EE71574009CB2E3 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Common;
+			sourceTree = "<group>";
+		};
 		FA2B7DF81EE5B56B0071051E /* SupportFile */ = {
 			isa = PBXGroup;
 			children = (
@@ -135,6 +150,8 @@
 		FA319B4C1EE595830094F187 /* PersonCalendar */ = {
 			isa = PBXGroup;
 			children = (
+				691690F71EE71574009CB2E3 /* Common */,
+				691690F61EE71538009CB2E3 /* Model */,
 				FA2B7DF81EE5B56B0071051E /* SupportFile */,
 				FAFA36921EE59EEC001DCCAC /* Controller */,
 				FAFA36911EE59EC8001DCCAC /* Layout */,
@@ -176,7 +193,6 @@
 			children = (
 				FA319B4F1EE595830094F187 /* ViewController.swift */,
 				FAD2E0FF1EE6F08300E99FC8 /* EventCell.swift */,
-				FAD2E1011EE6F8CF00E99FC8 /* EventObject.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
