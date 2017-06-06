@@ -5,6 +5,7 @@
     </device>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -37,20 +38,84 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="aZO-Ar-xch"/>
                                 </connections>
                             </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="nqp-Es-fkM">
+                                <rect key="frame" x="0.0" y="364" width="375" height="303"/>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="EventCell" rowHeight="70" id="6hz-6D-gFc" customClass="EventCell" customModule="PersonCalendar" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="375" height="70"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6hz-6D-gFc" id="TlB-Mx-yhI">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1iJ-fI-fV6" userLabel="EventTitle">
+                                                    <rect key="frame" x="40" y="64" width="0.0" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                                    <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mt2-3x-Efe" userLabel="DateTitle">
+                                                    <rect key="frame" x="10" y="10" width="355" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="ZL4-AH-gkB" userLabel="icon">
+                                                    <rect key="frame" x="10" y="49.5" width="10" height="10"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="10" id="17R-RK-ElR"/>
+                                                        <constraint firstAttribute="width" secondItem="ZL4-AH-gkB" secondAttribute="height" multiplier="1:1" id="HLl-jr-XDd"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a6a-xO-JWa" userLabel="Time">
+                                                    <rect key="frame" x="365" y="59" width="0.0" height="0.0"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="ZL4-AH-gkB" secondAttribute="bottom" constant="10" id="5qf-Cw-OcK"/>
+                                                <constraint firstItem="1iJ-fI-fV6" firstAttribute="leading" secondItem="ZL4-AH-gkB" secondAttribute="trailing" constant="20" id="8If-uF-zlt"/>
+                                                <constraint firstItem="ZL4-AH-gkB" firstAttribute="leading" secondItem="TlB-Mx-yhI" secondAttribute="leading" constant="10" id="GV9-MR-Ffp"/>
+                                                <constraint firstAttribute="trailing" secondItem="a6a-xO-JWa" secondAttribute="trailing" constant="10" id="Gmm-UR-P2t"/>
+                                                <constraint firstItem="mt2-3x-Efe" firstAttribute="leading" secondItem="TlB-Mx-yhI" secondAttribute="leading" constant="10" id="VWI-hT-rTN"/>
+                                                <constraint firstItem="mt2-3x-Efe" firstAttribute="top" secondItem="TlB-Mx-yhI" secondAttribute="top" constant="10" id="ZTd-rm-hsW"/>
+                                                <constraint firstAttribute="trailing" secondItem="mt2-3x-Efe" secondAttribute="trailing" constant="10" id="tg9-da-sAu"/>
+                                                <constraint firstItem="1iJ-fI-fV6" firstAttribute="baseline" secondItem="ZL4-AH-gkB" secondAttribute="baseline" id="us9-uD-blA"/>
+                                                <constraint firstAttribute="bottom" secondItem="a6a-xO-JWa" secondAttribute="bottom" constant="10" id="vrJ-JL-cKl"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="icon" destination="ZL4-AH-gkB" id="AmL-Do-1hl"/>
+                                            <outlet property="lblDate" destination="mt2-3x-Efe" id="4c6-LG-VXU"/>
+                                            <outlet property="lblEvent" destination="1iJ-fI-fV6" id="fjR-gi-aDy"/>
+                                            <outlet property="lblTime" destination="a6a-xO-JWa" id="Adc-io-md8"/>
+                                        </connections>
+                                    </tableViewCell>
+                                </prototypes>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="ebP-Dw-8uN" firstAttribute="top" secondItem="0bZ-Zy-Zro" secondAttribute="bottom" id="9xV-UV-gmV"/>
                             <constraint firstItem="0bZ-Zy-Zro" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Cmw-cB-tdX"/>
+                            <constraint firstItem="nqp-Es-fkM" firstAttribute="top" secondItem="ebP-Dw-8uN" secondAttribute="bottom" id="OKg-6q-5Nh"/>
                             <constraint firstItem="ebP-Dw-8uN" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="OMa-XQ-YJe"/>
                             <constraint firstAttribute="trailing" secondItem="0bZ-Zy-Zro" secondAttribute="trailing" id="Ub7-v1-x99"/>
                             <constraint firstItem="0bZ-Zy-Zro" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="gdY-iO-3Wj"/>
+                            <constraint firstItem="nqp-Es-fkM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="gxV-5T-3yv"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="nqp-Es-fkM" secondAttribute="bottom" id="mnM-7H-eaR"/>
+                            <constraint firstAttribute="trailing" secondItem="nqp-Es-fkM" secondAttribute="trailing" id="uhN-qk-iTJ"/>
                             <constraint firstAttribute="trailing" secondItem="ebP-Dw-8uN" secondAttribute="trailing" id="upE-Jy-fDb"/>
                         </constraints>
                     </view>
                     <connections>
                         <outlet property="fsCalendar" destination="ebP-Dw-8uN" id="daQ-eW-vMd"/>
                         <outlet property="heightCalendar" destination="0pQ-oz-UtA" id="bRL-nV-Iju"/>
+                        <outlet property="tableView" destination="nqp-Es-fkM" id="ei0-Df-33F"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
