@@ -46,7 +46,7 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="70"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="6hz-6D-gFc" id="TlB-Mx-yhI">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="70"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="69"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1iJ-fI-fV6" userLabel="EventTitle">
@@ -113,11 +113,32 @@
                     <connections>
                         <outlet property="fsCalendar" destination="ebP-Dw-8uN" id="daQ-eW-vMd"/>
                         <outlet property="heightCalendar" destination="0pQ-oz-UtA" id="bRL-nV-Iju"/>
+                        <outlet property="navigationBar" destination="0bZ-Zy-Zro" id="Dq9-9G-b9B"/>
                         <outlet property="tableView" destination="nqp-Es-fkM" id="ei0-Df-33F"/>
+                        <segue destination="qtS-pI-C29" kind="push" identifier="addEvent" id="tvt-Be-4TG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+        </scene>
+        <!--Add Event Controller-->
+        <scene sceneID="IcR-Wm-rQ6">
+            <objects>
+                <viewController id="qtS-pI-C29" customClass="AddEventController" customModule="PersonCalendar" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="w2P-ZN-bif"/>
+                        <viewControllerLayoutGuide type="bottom" id="EAo-yO-bKu"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="3Ez-bm-ken">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="Iug-3M-g5P"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bbN-eT-wmV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="838" y="119"/>
         </scene>
     </scenes>
 </document>

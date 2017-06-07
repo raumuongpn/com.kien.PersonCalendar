@@ -14,6 +14,7 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     @IBOutlet weak var fsCalendar: FSCalendar!
     @IBOutlet weak var heightCalendar: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var navigationBar: UINavigationBar!
     
     var currentDate:Date = Date()
     var listEvent = [EventObject]()
@@ -35,6 +36,7 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         // config calendar
         fsCalendar.select(Date())
