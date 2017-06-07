@@ -108,6 +108,17 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         tableView.reloadData()
     }
     
+    func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
+        var numb = 0
+        for item in listEvent {
+            if item.eventDate.compare(date) == .orderedSame {
+               numb += 1
+            }
+        }
+        return numb
+        
+    }
+    
     // MARK:- handle tableview
     
     func numberOfSections(in tableView: UITableView) -> Int {
