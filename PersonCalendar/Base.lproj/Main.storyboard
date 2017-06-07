@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11762" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="D9L-hD-1Iy">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -21,12 +21,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0bZ-Zy-Zro">
-                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
-                                <items>
-                                    <navigationItem title="Title" id="lz1-3q-jeI"/>
-                                </items>
-                            </navigationBar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ebP-Dw-8uN" customClass="FSCalendar">
                                 <rect key="frame" x="0.0" y="64" width="375" height="300"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -98,28 +92,26 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="ebP-Dw-8uN" firstAttribute="top" secondItem="0bZ-Zy-Zro" secondAttribute="bottom" id="9xV-UV-gmV"/>
-                            <constraint firstItem="0bZ-Zy-Zro" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="Cmw-cB-tdX"/>
                             <constraint firstItem="nqp-Es-fkM" firstAttribute="top" secondItem="ebP-Dw-8uN" secondAttribute="bottom" id="OKg-6q-5Nh"/>
                             <constraint firstItem="ebP-Dw-8uN" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="OMa-XQ-YJe"/>
-                            <constraint firstAttribute="trailing" secondItem="0bZ-Zy-Zro" secondAttribute="trailing" id="Ub7-v1-x99"/>
-                            <constraint firstItem="0bZ-Zy-Zro" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="gdY-iO-3Wj"/>
                             <constraint firstItem="nqp-Es-fkM" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="gxV-5T-3yv"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="nqp-Es-fkM" secondAttribute="bottom" id="mnM-7H-eaR"/>
+                            <constraint firstItem="ebP-Dw-8uN" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="rZz-4t-Ne3"/>
                             <constraint firstAttribute="trailing" secondItem="nqp-Es-fkM" secondAttribute="trailing" id="uhN-qk-iTJ"/>
                             <constraint firstAttribute="trailing" secondItem="ebP-Dw-8uN" secondAttribute="trailing" id="upE-Jy-fDb"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" id="Kzn-xm-agW"/>
                     <connections>
                         <outlet property="fsCalendar" destination="ebP-Dw-8uN" id="daQ-eW-vMd"/>
                         <outlet property="heightCalendar" destination="0pQ-oz-UtA" id="bRL-nV-Iju"/>
-                        <outlet property="navigationBar" destination="0bZ-Zy-Zro" id="Dq9-9G-b9B"/>
                         <outlet property="tableView" destination="nqp-Es-fkM" id="ei0-Df-33F"/>
                         <segue destination="qtS-pI-C29" kind="push" identifier="addEvent" id="tvt-Be-4TG"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="964" y="36.431784107946029"/>
         </scene>
         <!--Add Event Controller-->
         <scene sceneID="IcR-Wm-rQ6">
@@ -138,7 +130,25 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bbN-eT-wmV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="838" y="119"/>
+            <point key="canvasLocation" x="1776.8" y="118.29085457271366"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="Q2f-s6-XX4">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="D9L-hD-1Iy" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="2Ry-KB-gKg">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="5dH-EB-osA"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="D1s-Ge-dPl" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-647.20000000000005" y="48.125937031484263"/>
         </scene>
     </scenes>
 </document>

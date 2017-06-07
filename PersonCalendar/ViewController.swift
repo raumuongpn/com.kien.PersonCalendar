@@ -14,7 +14,6 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     @IBOutlet weak var fsCalendar: FSCalendar!
     @IBOutlet weak var heightCalendar: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var navigationBar: UINavigationBar!
     
     var currentDate:Date = Date()
     var listEvent = [EventObject]()
@@ -36,6 +35,22 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        let uiUtils = UIUtils()
+        //btn today
+        let button = uiUtils.buildButton(image: UIImage(), title: "Today", colorText: UIColor.colorFromRGB(0x3498db))
+        button.addTarget(self, action: #selector(ViewController.gotoToday), for: .touchUpInside)
+        let barButton = UIBarButtonItem()
+        barButton.customView = button
+        self.navigationItem.leftBarButtonItem = barButton
+        //btn add
+        let rightBtn = uiUtils.buildButton(image: UIImage(), title: "Add", colorText: UIColor.colorFromRGB(0x3498db))
+        rightBtn.addTarget(self, action: #selector(ViewController.addEvent), for: .touchUpInside)
+        let rightBtnBar = UIBarButtonItem()
+        rightBtnBar.customView = rightBtn
+        self.navigationItem.rightBarButtonItem = rightBtnBar
+        self.navigationItem.title = dateFormatter.string(from: fsCalendar.today!)
         
         
         // config calendar
@@ -124,6 +139,15 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
             }
         }
         return EventObject.init()
+    }
+    
+    func gotoToday(){
+        fsCalendar.select(fsCalendar.today, scrollToDate: true)
+        fsCalendar.setCurrentPage(fsCalendar.today!, animated: true)
+    }
+    
+    func addEvent(){
+        self.performSegue(withIdentifier: "addEvent", sender: self)
     }
     
     func createDataDummy() -> [EventObject] {
