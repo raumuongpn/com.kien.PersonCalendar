@@ -12,41 +12,58 @@ import Foundation
 class EventObject: NSObject, NSCoding {
     var eventId: Int
     var eventName: String
-    var eventDate: Date
+    var startDate: Date
+    var endDate: Date
     var startTime: String
     var endTime: String
+    var note: String
+    var allDay: Bool
     
     
-    init(eventId: Int, eventName: String, eventDate: Date, startTime: String, endTime: String) {
+    init(eventId: Int, eventName: String, startDate: Date, endDate: Date, startTime: String, endTime: String, note: String, allDay: Bool) {
         self.eventId = eventId
         self.eventName = eventName
-        self.eventDate = eventDate
+        self.startDate = startDate
+        self.endDate = endDate
         self.startTime = startTime
         self.endTime = endTime
+        self.note = note
+        self.allDay = allDay
     }
     
-    override init(){
-        self.eventId = 0
-        self.eventName = ""
-        self.eventDate = Date()
-        self.startTime = ""
-        self.endTime = ""
+    override init() {
+        code
     }
     
     required convenience init(coder aDecoder: NSCoder) {
         let eventId = aDecoder.decodeInteger(forKey: "eventId")
         let eventName = aDecoder.decodeObject(forKey: "eventName") as! String
-        let eventDate = aDecoder.decodeObject(forKey: "eventDate") as! Date
+        let startDate = aDecoder.decodeObject(forKey: "startDate") as! Date
+        let endDate = aDecoder.decodeObject(forKey: "endDate") as! Date
         let startTime = aDecoder.decodeObject(forKey: "startTime") as! String
         let endTime = aDecoder.decodeObject(forKey: "endTime") as! String
-        self.init(eventId: eventId, eventName: eventName, eventDate: eventDate,startTime: startTime, endTime: endTime)
+        let note = aDecoder.decodeObject(forKey: "note") as! String
+        let allDay = aDecoder.decodeObject(forKey: "allDay") as! Bool
+        self.init(eventId: eventId, eventName: eventName, startDate: startDate, endDate: endDate, startTime: startTime, endTime: endTime, note: note, allDay: allDay)
     }
     
     func encode(with aCoder: NSCoder) {
         aCoder.encode(eventId, forKey: "eventId")
         aCoder.encode(eventName, forKey: "eventName")
-        aCoder.encode(eventDate, forKey: "eventDate")
+        aCoder.encode(startDate, forKey: "startDate")
+        aCoder.encode(endDate, forKey: "endDate")
         aCoder.encode(startTime, forKey: "startTime")
         aCoder.encode(endTime, forKey: "endTime")
+        aCoder.encode(note, forKey: "note")
+        aCoder.encode(allDay, forKey: "allDay")
+    }
+    
+    func isEqual(object: AnyObject?) -> Bool {
+        if let object = object as? EventObject {
+            return self.eventId == object.eventId &&
+                self.eventName == object.eventName
+        } else {
+            return false
+        }
     }
 }
