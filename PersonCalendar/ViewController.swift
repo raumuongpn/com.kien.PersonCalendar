@@ -111,7 +111,7 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
         var numb = 0
         for item in listEvent {
-            if item.eventDate.compare(date) == .orderedSame {
+            if item.startDate.compare(date) == .orderedSame {
                numb += 1
             }
         }
@@ -145,7 +145,7 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     
     func getDataFromDate(selectDate: Date) -> EventObject{
         for item in listEvent {
-            if item.eventDate.compare(selectDate) == .orderedSame {
+            if item.startDate.compare(selectDate) == .orderedSame {
                 return item
             }
         }
@@ -163,11 +163,12 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     
     func createDataDummy() -> [EventObject] {
         var listData = [EventObject]()
-        listData.append(EventObject.init(eventId: 1, eventName: "Birthday Name", eventDate: dateFormatter.date(from: "06/06/2017")!, startTime: "20:00", endTime: "00:00"))
-        listData.append(EventObject.init(eventId: 2, eventName: "Đá bóng", eventDate: dateFormatter.date(from: "20/06/2017")!, startTime: "17:00", endTime: "19:00"))
-        listData.append(EventObject.init(eventId: 3, eventName: "Đi Địt", eventDate: dateFormatter.date(from: "22/06/2017")!, startTime: "22:00", endTime: "22:01"))
-        listData.append(EventObject.init(eventId: 4, eventName: "Birthday CC", eventDate: dateFormatter.date(from: "11/06/2017")!, startTime: "11:00", endTime: "12:00"))
-        listData.append(EventObject.init(eventId: 5, eventName: "SML test", eventDate: dateFormatter.date(from: "01/06/2017")!, startTime: "1:00", endTime: "2:00"))
+        
+        listData.append(EventObject.init(eventId: 1, eventName: "hhhhhhhhhhh", startDate: dateFormatter.date(from: "06/06/2017")!, endDate: dateFormatter.date(from: "06/06/2017")!, startTime: "20:00", endTime: "22:15", note: "abcbcdsad", allDay: false))
+        listData.append(EventObject.init(eventId: 1, eventName: "Happy birthday", startDate: dateFormatter.date(from: "15/06/2017")!, endDate: dateFormatter.date(from: "15/06/2017")!, startTime: "20:00", endTime: "21:30", note: "abcbcdsad", allDay: false))
+        listData.append(EventObject.init(eventId: 1, eventName: "chịch", startDate: dateFormatter.date(from: "26/06/2017")!, endDate: dateFormatter.date(from: "26/06/2017")!, startTime: "20:00", endTime: "21:00", note: "abcbcdsad", allDay: false))
+        listData.append(EventObject.init(eventId: 1, eventName: "cc", startDate: dateFormatter.date(from: "16/06/2017")!, endDate: dateFormatter.date(from: "16/06/2017")!, startTime: "23:00", endTime: "00:00", note: "abcbcdsad", allDay: false))
+        listData.append(EventObject.init(eventId: 1, eventName: "sml", startDate: dateFormatter.date(from: "11/06/2017")!, endDate: dateFormatter.date(from: "11/06/2017")!, startTime: "21:00", endTime: "00:00", note: "abcbcdsad", allDay: false))
         return listData
     }
     

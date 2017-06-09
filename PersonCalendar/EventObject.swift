@@ -31,6 +31,9 @@ class EventObject: NSObject, NSCoding {
         self.allDay = allDay
     }
     
+    convenience override init(){
+        self.init(eventId: 0, eventName: "", startDate: Date(), endDate: Date(), startTime: "", endTime: "", note: "", allDay: false)
+    }
 //    override init() {
 //        code
 //    }
