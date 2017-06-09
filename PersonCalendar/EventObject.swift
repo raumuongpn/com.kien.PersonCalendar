@@ -31,9 +31,9 @@ class EventObject: NSObject, NSCoding {
         self.allDay = allDay
     }
     
-    override init() {
-        code
-    }
+//    override init() {
+//        code
+//    }
     
     required convenience init(coder aDecoder: NSCoder) {
         let eventId = aDecoder.decodeInteger(forKey: "eventId")

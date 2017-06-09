@@ -30,7 +30,7 @@ class AddEventController: UIViewController {
         }
     }
     
-    var eventEdit = EventObject()
+//    var eventEdit = EventObject()
 
 
     override func viewDidLoad() {
