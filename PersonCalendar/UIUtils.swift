@@ -10,6 +10,11 @@ import Foundation
 
 
 open class UIUtils {
+    var dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd/MM/yyyy"
+        return formatter
+    }()
     
     func buildButton(image: UIImage, title: String, colorText: UIColor) -> UIButton {
         let attributedString = NSMutableAttributedString.init(string: title)
@@ -37,5 +42,32 @@ extension UIColor {
             blue: CGFloat(rgbValue & 0x0000FF) / 255.0,
             alpha: CGFloat(1.0)
         )
+    }
+}
+
+extension Date
+{
+    func isBetweenDates(startDate: Date, endDate: Date) -> Bool
+    {
+        if self.compare(startDate) == .orderedAscending
+        {
+            return false
+        }
+        
+        if self.compare(endDate) == .orderedDescending
+        {
+            return false
+        }
+        
+        return true
+    }
+    
+    func isSameDate(otherDate: Date) -> Bool
+    {
+        if self.compare(otherDate) == .orderedSame
+        {
+            return true
+        }
+        return false
     }
 }

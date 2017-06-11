@@ -10,6 +10,16 @@ import UIKit
 
 class AddEventController: UIViewController {
     
+    @IBOutlet weak var tfEventName: UITextField!
+    @IBOutlet weak var tfNote: UITextField!
+    @IBOutlet weak var tfStartDate: UITextField!
+    @IBOutlet weak var tfEndDate: UITextField!
+    @IBOutlet weak var tfStartTime: UITextField!
+    @IBOutlet weak var tfEndTime: UITextField!
+    @IBOutlet weak var switchAllDay: UISwitch!
+    
+    let utils = UIUtils()
+    
     private let userDefaults = UserDefaults.standard
     private let keyUserDefaults: String = "event_list_key"
     private(set) var eventList:[EventObject] {
@@ -30,11 +40,15 @@ class AddEventController: UIViewController {
         }
     }
     
-//    var eventEdit = EventObject()
+    var eventEdit = EventObject()
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if eventEdit.eventId != 0 {
+            loadDataToForm()
+        }
         
     }
     
@@ -43,19 +57,52 @@ class AddEventController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func onClickBtnSave(_ sender: UIButton) {
+        let eventId = eventEdit.eventId == 0 ? self.createEventId() : eventEdit.eventId
+        let eventItem = EventObject.init(eventId: eventId, eventName: tfEventName.text!, startDate: utils.dateFormatter.date(from: tfStartDate.text!)!, endDate: utils.dateFormatter.date(from: tfEndDate.text!)!, startTime: tfStartTime.text!, endTime: tfEndTime.text!, note: tfNote.text!, allDay: switchAllDay.isOn)
+        saveEvent(event: eventItem, isTypeAction: eventEdit.eventId == 0 ? actionTypeOfEvent.save : actionTypeOfEvent.edit)
+    }
     
-    func saveEvent(event: EventObject){
+    func loadDataToForm(){
+        tfEventName.text = eventEdit.eventName
+        tfNote.text = eventEdit.note
+        tfStartDate.text = utils.dateFormatter.string(from: eventEdit.startDate)
+        tfEndDate.text = utils.dateFormatter.string(from: eventEdit.endDate)
+        tfStartTime.text = eventEdit.startTime
+        tfEndTime.text = eventEdit.endTime
+        switchAllDay.isOn = eventEdit.allDay
+    }
+    
+    func createEventId() -> Int {
+        if self.eventList.count > 0 {
+            let idMax = self.eventList.map{ $0.eventId }.max()
+            return (idMax! + 1)
+        }
+        return 1
+    }
+    
+    
+    open func saveEvent(event: EventObject, isTypeAction: actionTypeOfEvent){
         var eventList = self.eventList
-        eventList.append(event)
+        switch isTypeAction {
+        case .save:
+            eventList.append(event)
+        case .edit:
+            if let index = eventList.index(where: {$0.eventId == event.eventId} ){
+                eventList.remove(at: index)
+                eventList.insert(event, at: index)
+            }
+        case .delete:
+            if let index = eventList.index(where: {$0.eventId == event.eventId} ){
+                eventList.remove(at: index)
+            }
+        }
         self.eventList = eventList
     }
-    
-    func removeEvent(event: EventObject) {
-        var eventList = self.eventList
-        if let index = eventList.index(where: {$0.eventId == event.eventId} ){
-            eventList.remove(at: index)
-            self.eventList = eventList
-        }
-    }
+}
 
+enum actionTypeOfEvent: Int{
+    case save
+    case edit
+    case delete
 }

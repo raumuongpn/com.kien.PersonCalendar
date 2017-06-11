@@ -15,14 +15,28 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     @IBOutlet weak var heightCalendar: NSLayoutConstraint!
     @IBOutlet weak var tableView: UITableView!
     
-    var currentDate:Date = Date()
-    var listEvent = [EventObject]()
-    
-    fileprivate lazy var dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "dd/MM/yyyy"
-        return formatter
-    }()
+    var listEventVisible: [EventObject] = [EventObject]()
+    var eventEdit = EventObject()
+    let uiUtils = UIUtils()
+    private let userDefaults = UserDefaults.standard
+    private let keyUserDefaults: String = "event_list_key"
+    private(set) var eventList:[EventObject] {
+        
+        get {
+            if let eventistData = userDefaults.object(forKey: keyUserDefaults) {
+                if let eventlist = NSKeyedUnarchiver.unarchiveObject(with: eventistData as! Data) {
+                    return eventlist as! [EventObject]
+                }
+            }
+            return []
+        }
+        
+        set(eventlist) {
+            let eventistData = NSKeyedArchiver.archivedData(withRootObject: eventlist)
+            userDefaults.set(eventistData, forKey: keyUserDefaults)
+            userDefaults.synchronize()
+        }
+    }
     
     fileprivate lazy var scopeGesture: UIPanGestureRecognizer = {
         [unowned self] in
@@ -37,7 +51,6 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         super.viewDidLoad()
         
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        let uiUtils = UIUtils()
         //btn today
         let button = uiUtils.buildButton(image: UIImage(), title: "Today", colorText: UIColor.colorFromRGB(0x3498db))
         button.addTarget(self, action: #selector(ViewController.gotoToday), for: .touchUpInside)
@@ -50,7 +63,7 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         let rightBtnBar = UIBarButtonItem()
         rightBtnBar.customView = rightBtn
         self.navigationItem.rightBarButtonItem = rightBtnBar
-        self.navigationItem.title = dateFormatter.string(from: fsCalendar.today!)
+        self.navigationItem.title = uiUtils.dateFormatter.string(from: fsCalendar.today!)
         
         
         // config calendar
@@ -63,7 +76,6 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         tableView.dataSource = self
         tableView.delegate = self
         tableView.rowHeight = 70
-        listEvent = createDataDummy()
         
         
         self.view.addGestureRecognizer(self.scopeGesture)
@@ -104,19 +116,13 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         if monthPosition == .next || monthPosition == .previous {
             calendar.setCurrentPage(date, animated: true)
         }
-        currentDate = date
+        listEventVisible = getEventOfDate(inDate: date)
         tableView.reloadData()
     }
     
     func calendar(_ calendar: FSCalendar, numberOfEventsFor date: Date) -> Int {
-        var numb = 0
-        for item in listEvent {
-            if item.startDate.compare(date) == .orderedSame {
-               numb += 1
-            }
-        }
-        return numb
-        
+        let data = getEventOfDate(inDate: date)
+        return data.count        
     }
     
     // MARK:- handle tableview
@@ -126,51 +132,101 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        return listEventVisible.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventCell") as! EventCell
-        let data = getDataFromDate(selectDate: currentDate)
+        let data = listEventVisible[indexPath.row]
         if data.eventId != 0 {
             cell.isHidden = false
-            cell.lblDate.text = dateFormatter.string(from: currentDate)
             cell.lblEvent.text = data.eventName
-            cell.lblTime.text = data.startTime + "-" + data.endTime
+            if data.allDay {
+                cell.lblTime.text = getTextDate(data: data)
+            }else{
+                cell.lblDate.text = getTextDate(data: data)
+                cell.lblTime.text = data.startTime + "-" + data.endTime
+            }
+            
         }else{
             cell.isHidden = true
         }
         return cell
     }
     
-    func getDataFromDate(selectDate: Date) -> EventObject{
-        for item in listEvent {
-            if item.startDate.compare(selectDate) == .orderedSame {
-                return item
-            }
-        }
-        return EventObject.init()
+    // action for row of tableview
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        // action edit
+        let editAction = UITableViewRowAction(style: .default, title: "Edit", handler: { (action, indexPath) in
+            self.eventEdit = self.listEventVisible[indexPath.row]
+            self.performSegue(withIdentifier: "addEvent", sender: self)
+        })
+        editAction.backgroundColor = UIColor.yellow
+        
+        // action delete
+        let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+            let alert = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "YES", style: UIAlertActionStyle.default, handler: { action in
+                let addEventController = AddEventController()
+                addEventController.saveEvent(event: self.listEventVisible[indexPath.row], isTypeAction: actionTypeOfEvent.delete)
+            }))
+            alert.addAction(UIAlertAction(title: "NO", style: UIAlertActionStyle.default, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        })
+        deleteAction.backgroundColor = UIColor.red
+        
+        return [deleteAction, editAction]
     }
     
+    // get list event of select date
+    func getEventOfDate(inDate : Date) -> [EventObject]{
+        var result = [EventObject]()
+        for eventItem in self.eventList {
+            if inDate.isBetweenDates(startDate: eventItem.startDate, endDate: eventItem.endDate) {
+                result.append(eventItem)
+            }
+        }
+        return  result
+    }
+    
+    func getTextDate(data: EventObject) -> String {
+        if data.startDate.isSameDate(otherDate: data.endDate){
+            return uiUtils.dateFormatter.string(from: data.startDate)
+        }else{
+            return uiUtils.dateFormatter.string(from: data.startDate)  + "-" + uiUtils.dateFormatter.string(from: data.endDate)
+        }
+    }
+    
+    // go to Today at calendar
     func gotoToday(){
         fsCalendar.select(fsCalendar.today, scrollToDate: true)
         fsCalendar.setCurrentPage(fsCalendar.today!, animated: true)
     }
     
+    // goto add event screen
     func addEvent(){
+        eventEdit = EventObject()
         self.performSegue(withIdentifier: "addEvent", sender: self)
     }
     
-    func createDataDummy() -> [EventObject] {
-        var listData = [EventObject]()
-        
-        listData.append(EventObject.init(eventId: 1, eventName: "hhhhhhhhhhh", startDate: dateFormatter.date(from: "06/06/2017")!, endDate: dateFormatter.date(from: "06/06/2017")!, startTime: "20:00", endTime: "22:15", note: "abcbcdsad", allDay: false))
-        listData.append(EventObject.init(eventId: 1, eventName: "Happy birthday", startDate: dateFormatter.date(from: "15/06/2017")!, endDate: dateFormatter.date(from: "15/06/2017")!, startTime: "20:00", endTime: "21:30", note: "abcbcdsad", allDay: false))
-        listData.append(EventObject.init(eventId: 1, eventName: "chịch", startDate: dateFormatter.date(from: "26/06/2017")!, endDate: dateFormatter.date(from: "26/06/2017")!, startTime: "20:00", endTime: "21:00", note: "abcbcdsad", allDay: false))
-        listData.append(EventObject.init(eventId: 1, eventName: "cc", startDate: dateFormatter.date(from: "16/06/2017")!, endDate: dateFormatter.date(from: "16/06/2017")!, startTime: "23:00", endTime: "00:00", note: "abcbcdsad", allDay: false))
-        listData.append(EventObject.init(eventId: 1, eventName: "sml", startDate: dateFormatter.date(from: "11/06/2017")!, endDate: dateFormatter.date(from: "11/06/2017")!, startTime: "21:00", endTime: "00:00", note: "abcbcdsad", allDay: false))
-        return listData
+    // pass data to AddEventController
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if (segue.identifier == "addEvent" && self.eventEdit.eventId != 0) {
+            let addEventController = segue.destination as! AddEventController
+            addEventController.eventEdit = self.eventEdit
+        }
     }
+    
+//    func createDataDummy() -> [EventObject] {
+//        var listData = [EventObject]()
+//        let utils = UIUtils()
+//        listData.append(EventObject.init(eventId: 1, eventName: "hhhhhhhhhhh", startDate: utils.dateFormatter.date(from: "06/06/2017")!, endDate: utils.dateFormatter.date(from: "06/06/2017")!, startTime: "20:00", endTime: "22:15", note: "abcbcdsad", allDay: false))
+//        listData.append(EventObject.init(eventId: 1, eventName: "Happy birthday", startDate: utils.dateFormatter.date(from: "15/06/2017")!, endDate: utils.dateFormatter.date(from: "15/06/2017")!, startTime: "20:00", endTime: "21:30", note: "abcbcdsad", allDay: false))
+//        listData.append(EventObject.init(eventId: 1, eventName: "chịch", startDate: utils.dateFormatter.date(from: "26/06/2017")!, endDate: utils.dateFormatter.date(from: "26/06/2017")!, startTime: "20:00", endTime: "21:00", note: "abcbcdsad", allDay: false))
+//        listData.append(EventObject.init(eventId: 1, eventName: "cc", startDate: utils.dateFormatter.date(from: "16/06/2017")!, endDate: utils.dateFormatter.date(from: "16/06/2017")!, startTime: "23:00", endTime: "00:00", note: "abcbcdsad", allDay: false))
+//        listData.append(EventObject.init(eventId: 1, eventName: "sml", startDate: utils.dateFormatter.date(from: "11/06/2017")!, endDate: utils.dateFormatter.date(from: "11/06/2017")!, startTime: "21:00", endTime: "00:00", note: "abcbcdsad", allDay: false))
+//        return listData
+//    }
     
 }
 
