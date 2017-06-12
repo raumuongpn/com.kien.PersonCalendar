@@ -11,12 +11,13 @@ import UIKit
 class AddEventController: UIViewController {
     
     @IBOutlet weak var tfEventName: UITextField!
-    @IBOutlet weak var tfNote: UITextField!
+    @IBOutlet weak var tfNote: UITextView!
     @IBOutlet weak var tfStartDate: UITextField!
     @IBOutlet weak var tfEndDate: UITextField!
     @IBOutlet weak var tfStartTime: UITextField!
     @IBOutlet weak var tfEndTime: UITextField!
     @IBOutlet weak var switchAllDay: UISwitch!
+    @IBOutlet weak var imgView: UIImageView!
     
     let utils = UIUtils()
     
@@ -46,7 +47,22 @@ class AddEventController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //btn save
+        let rightBtn = utils.buildButton(image: UIImage(), title: "Save", colorText: UIColor.colorFromRGB(0x3498db))
+        rightBtn.addTarget(self, action: #selector(AddEventController.onClickBtnSave), for: .touchUpInside)
+        let rightBtnBar = UIBarButtonItem()
+        rightBtnBar.customView = rightBtn
+        self.navigationItem.rightBarButtonItem = rightBtnBar
+        // title view
+        self.navigationItem.title = "Add New Event"
+        // btn back
+        self.navigationItem.backBarButtonItem?.title = "Back"
+        tfNote.layer.borderWidth = 1
+        tfNote.layer.borderColor = UIColor.lightGray.cgColor
+        tfNote.layer.cornerRadius = 5
+        
         if eventEdit.eventId != 0 {
+            self.navigationItem.title = "Edit Event"
             loadDataToForm()
         }
         
@@ -57,7 +73,7 @@ class AddEventController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    @IBAction func onClickBtnSave(_ sender: UIButton) {
+    func onClickBtnSave() {
         let eventId = eventEdit.eventId == 0 ? self.createEventId() : eventEdit.eventId
         let eventItem = EventObject.init(eventId: eventId, eventName: tfEventName.text!, startDate: utils.dateFormatter.date(from: tfStartDate.text!)!, endDate: utils.dateFormatter.date(from: tfEndDate.text!)!, startTime: tfStartTime.text!, endTime: tfEndTime.text!, note: tfNote.text!, allDay: switchAllDay.isOn)
         saveEvent(event: eventItem, isTypeAction: eventEdit.eventId == 0 ? actionTypeOfEvent.save : actionTypeOfEvent.edit)

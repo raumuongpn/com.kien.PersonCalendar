@@ -46,7 +46,7 @@ class EventObject: NSObject, NSCoding {
         let startTime = aDecoder.decodeObject(forKey: "startTime") as! String
         let endTime = aDecoder.decodeObject(forKey: "endTime") as! String
         let note = aDecoder.decodeObject(forKey: "note") as! String
-        let allDay = aDecoder.decodeObject(forKey: "allDay") as! Bool
+        let allDay = aDecoder.decodeBool(forKey: "allDay")
         self.init(eventId: eventId, eventName: eventName, startDate: startDate, endDate: endDate, startTime: startTime, endTime: endTime, note: note, allDay: allDay)
     }
     
@@ -58,7 +58,7 @@ class EventObject: NSObject, NSCoding {
         aCoder.encode(startTime, forKey: "startTime")
         aCoder.encode(endTime, forKey: "endTime")
         aCoder.encode(note, forKey: "note")
-        aCoder.encode(allDay, forKey: "allDay")
+        aCoder.encode(allDay, forKey: "allDay")		        
     }
     
     func isEqual(object: AnyObject?) -> Bool {
