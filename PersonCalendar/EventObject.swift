@@ -18,10 +18,10 @@ class EventObject: NSObject, NSCoding {
     var endTime: String
     var note: String
     var allDay: Bool
-    var avatar: Data = UIImagePNGRepresentation(UIImage.init(named: "Icon_Event.png")!)!
+    var avatar: String
     
     
-    init(eventId: Int, eventName: String, startDate: Date, endDate: Date, startTime: String, endTime: String, note: String, allDay: Bool, avatar: Data) {
+    init(eventId: Int, eventName: String, startDate: Date, endDate: Date, startTime: String, endTime: String, note: String, allDay: Bool, avatar: String) {
         self.eventId = eventId
         self.eventName = eventName
         self.startDate = startDate
@@ -34,7 +34,7 @@ class EventObject: NSObject, NSCoding {
     }
     
     convenience override init(){
-        self.init(eventId: 0, eventName: "", startDate: Date(), endDate: Date(), startTime: "", endTime: "", note: "", allDay: false, avatar: Data.init())
+        self.init(eventId: 0, eventName: "", startDate: Date(), endDate: Date(), startTime: "", endTime: "", note: "", allDay: false, avatar: "")
     }
 //    override init() {
 //        code
@@ -49,7 +49,7 @@ class EventObject: NSObject, NSCoding {
         let endTime = aDecoder.decodeObject(forKey: "endTime") as! String
         let note = aDecoder.decodeObject(forKey: "note") as! String
         let allDay = aDecoder.decodeBool(forKey: "allDay")
-        let avatar = aDecoder.decodeObject(forKey: "avatar") as! Data
+        let avatar = aDecoder.decodeObject(forKey: "avatar") as! String
         self.init(eventId: eventId, eventName: eventName, startDate: startDate, endDate: endDate, startTime: startTime, endTime: endTime, note: note, allDay: allDay, avatar: avatar)
     }
     

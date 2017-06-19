@@ -17,6 +17,8 @@
 		69447E741EED442500106DF7 /* Icon_Event@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69447E721EED442500106DF7 /* Icon_Event@2x.png */; };
 		69447E751EED442500106DF7 /* Icon_Event@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69447E731EED442500106DF7 /* Icon_Event@3x.png */; };
 		694A13DE1EF176D800D36B14 /* PopupSelectDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A13DD1EF176D800D36B14 /* PopupSelectDate.swift */; };
+		FA0884B91EF816370072D4EA /* logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0884B71EF816370072D4EA /* logo@2x.png */; };
+		FA0884BA1EF816370072D4EA /* logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FA0884B81EF816370072D4EA /* logo@3x.png */; };
 		FA319B4E1EE595830094F187 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA319B4D1EE595830094F187 /* AppDelegate.swift */; };
 		FA319B501EE595830094F187 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA319B4F1EE595830094F187 /* ViewController.swift */; };
 		FA319B531EE595830094F187 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA319B511EE595830094F187 /* Main.storyboard */; };
@@ -58,6 +60,8 @@
 		69447E731EED442500106DF7 /* Icon_Event@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon_Event@3x.png"; sourceTree = "<group>"; };
 		694A13DD1EF176D800D36B14 /* PopupSelectDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupSelectDate.swift; sourceTree = "<group>"; };
 		8B8126DF3C61A9416F9C011A /* Pods_PersonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PersonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FA0884B71EF816370072D4EA /* logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@2x.png"; sourceTree = "<group>"; };
+		FA0884B81EF816370072D4EA /* logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "logo@3x.png"; sourceTree = "<group>"; };
 		FA2B7DF91EE5B7710071051E /* PersonCalendar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PersonCalendar-Bridging-Header.h"; sourceTree = "<group>"; };
 		FA319B4A1EE595830094F187 /* PersonCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PersonCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA319B4D1EE595830094F187 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -183,6 +187,8 @@
 			isa = PBXGroup;
 			children = (
 				690A66431EE86DD200718A38 /* Image */,
+				FA0884B71EF816370072D4EA /* logo@2x.png */,
+				FA0884B81EF816370072D4EA /* logo@3x.png */,
 				691690F71EE71574009CB2E3 /* Common */,
 				691690F61EE71538009CB2E3 /* Model */,
 				FA2B7DF81EE5B56B0071051E /* SupportFile */,
@@ -349,7 +355,9 @@
 				690A664B1EE86DE300718A38 /* icon_Today@3x.png in Resources */,
 				690A66491EE86DE300718A38 /* icon_Add@3x.png in Resources */,
 				690A664A1EE86DE300718A38 /* icon_Today@2x.png in Resources */,
+				FA0884BA1EF816370072D4EA /* logo@3x.png in Resources */,
 				FA319B581EE595830094F187 /* LaunchScreen.storyboard in Resources */,
+				FA0884B91EF816370072D4EA /* logo@2x.png in Resources */,
 				690A66481EE86DE300718A38 /* icon_Add@2x.png in Resources */,
 				69447E751EED442500106DF7 /* Icon_Event@3x.png in Resources */,
 				FA319B551EE595830094F187 /* Assets.xcassets in Resources */,

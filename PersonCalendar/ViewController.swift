@@ -71,6 +71,9 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         fsCalendar.allowsMultipleSelection = false
         fsCalendar.scope = .month
         fsCalendar.placeholderType = FSCalendarPlaceholderType.fillHeadTail
+        fsCalendar.calendarHeaderView.backgroundColor = UIColor.black
+        fsCalendar.calendarWeekdayView.backgroundColor = UIColor.black
+        fsCalendar.backgroundColor = UIColor.black.withAlphaComponent(1)
         
         // config tableview
         tableView.dataSource = self
@@ -80,7 +83,7 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         
         self.view.addGestureRecognizer(self.scopeGesture)
         self.tableView.panGestureRecognizer.require(toFail: self.scopeGesture)
-        
+        loadData()
         tableView.reloadData()
         
         // reload page
@@ -93,6 +96,10 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func loadData(){
+        listEventVisible = getEventOfDate(inDate: Date())
     }
     
     // load page
@@ -163,7 +170,11 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
             }else{
                 cell.lblDateTime.text = getTextDate(data: data)
             }
-            cell.avatar.image = UIImage.init(data: data.avatar)
+            do{
+                try cell.avatar.image = UIImage(data: Data.init(contentsOf: URL.init(fileURLWithPath: data.avatar) ))
+            }catch{
+                cell.avatar.image = UIImage(named: "Icon_Event.png")
+            }
         }else{
             cell.isHidden = true
         }

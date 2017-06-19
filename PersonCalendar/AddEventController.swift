@@ -21,7 +21,6 @@ class AddEventController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     let picker = UIImagePickerController()
     let utils = UIUtils()
-    var avatarData = Data.init()
     
     private let userDefaults = UserDefaults.standard
     private let keyUserDefaults: String = "event_list_key"
@@ -45,6 +44,11 @@ class AddEventController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     var eventEdit = EventObject()
     
+    func documentsPath(forFileName name: String) -> String {
+        let paths: [Any] = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)
+        let documentsPath: String? = (paths[0] as? String)
+        return URL(fileURLWithPath: documentsPath!).appendingPathComponent(name).path
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -77,8 +81,7 @@ class AddEventController: UIViewController, UIImagePickerControllerDelegate, UIN
             loadDataToForm()
         }else{
             tfStartDate.text = utils.dateFormatter.string(from: Date())
-            tfEndDate.text = utils.dateFormatter.string(from: Date())
-            avatarData = UIImagePNGRepresentation(UIImage.init(named: "Icon_Event.png")!)!
+            tfEndDate.text = utils.dateFormatter.string(from: Date())            
         }
         
         // reload page
@@ -98,10 +101,10 @@ class AddEventController: UIViewController, UIImagePickerControllerDelegate, UIN
     func reloadPage(_ notification: Notification){
         if (notification.name.rawValue == "selectDate") {
             if notification.userInfo != nil{
-                let userInfo:Dictionary<String,String?> =
-                    notification.userInfo as! Dictionary<String,String?>
-                let selectDate = userInfo["selectDate"]!!
-                let dateOf = userInfo["dateOf"]!!
+                let userInfo:Dictionary<String,String> =
+                    notification.userInfo as! Dictionary<String,String>
+                let selectDate = userInfo["selectDate"]!
+                let dateOf = userInfo["dateOf"]!
                 switch dateOf {
                 case "start":
                     tfStartDate.text = selectDate
@@ -119,7 +122,15 @@ class AddEventController: UIViewController, UIImagePickerControllerDelegate, UIN
     func onClickBtnSave() {
         if validateForm() {
             let eventId = eventEdit.eventId == 0 ? self.createEventId() : eventEdit.eventId
-            let eventItem = EventObject.init(eventId: eventId, eventName: tfEventName.text!, startDate: utils.dateFormatter.date(from: tfStartDate.text!)!, endDate: utils.dateFormatter.date(from: tfEndDate.text!)!, startTime: tfStartTime.text!, endTime: tfEndTime.text!, note: tfNote.text!, allDay: switchAllDay.isOn, avatar: avatarData)
+            let imageData = UIImageJPEGRepresentation(self.imgView.image!, 1)
+            let imagePath: String = documentsPath(forFileName: "image_\(eventId).jpg")
+            do{
+                try imageData?.write(to: URL.init(fileURLWithPath: imagePath), options: .withoutOverwriting)
+            }
+            catch{
+                print("test")
+            }
+            let eventItem = EventObject.init(eventId: eventId, eventName: tfEventName.text!, startDate: utils.dateFormatter.date(from: tfStartDate.text!)!, endDate: utils.dateFormatter.date(from: tfEndDate.text!)!, startTime: tfStartTime.text!, endTime: tfEndTime.text!, note: tfNote.text!, allDay: switchAllDay.isOn, avatar: imagePath)
             saveEvent(event: eventItem, isTypeAction: eventEdit.eventId == 0 ? actionTypeOfEvent.save : actionTypeOfEvent.edit)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addEventOK"), object: nil, userInfo: nil)
             _ = self.navigationController?.popViewController(animated: true)
@@ -134,7 +145,15 @@ class AddEventController: UIViewController, UIImagePickerControllerDelegate, UIN
         tfStartTime.text = eventEdit.startTime
         tfEndTime.text = eventEdit.endTime
         switchAllDay.isOn = eventEdit.allDay
-        imgView.image = UIImage.init(data: avatarData)
+        let imagePath = eventEdit.avatar
+        print("path: \(eventEdit.avatar)")
+        if imagePath != "" {
+            do{
+                try imgView.image = UIImage(data: Data.init(contentsOf: URL.init(fileURLWithPath: imagePath)))
+            }catch{
+                print("cc")
+            }
+        }
     }
     
     func createEventId() -> Int {
@@ -211,7 +230,7 @@ class AddEventController: UIViewController, UIImagePickerControllerDelegate, UIN
         chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
         imgView.contentMode = .scaleAspectFit
         imgView.image = chosenImage
-        avatarData = UIImagePNGRepresentation(chosenImage)!
+//        avatarData = UIImagePNGRepresentation(chosenImage)!
         dismiss(animated:true, completion: nil)
     }
     
