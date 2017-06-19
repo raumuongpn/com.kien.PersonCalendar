@@ -82,11 +82,27 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         self.tableView.panGestureRecognizer.require(toFail: self.scopeGesture)
         
         tableView.reloadData()
+        
+        // reload page
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(ViewController.reloadPage(_:)),
+                                               name: NSNotification.Name(rawValue: "addEventOK"),
+                                               object: nil)
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    // load page
+    func reloadPage(_ notification: Notification){
+        if (notification.name.rawValue == "addEventOK") {
+            self.listEventVisible = self.getEventOfDate(inDate: self.fsCalendar.selectedDate!)
+            self.fsCalendar.reloadData()
+            self.tableView.reloadData()
+        }
+        
     }
     
     // MARK:- UIGestureRecognizerDelegate
@@ -141,13 +157,13 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
         if data.eventId != 0 {
             cell.isHidden = false
             cell.lblEvent.text = data.eventName
+            cell.lblNote.text = data.note
             if data.allDay {
-                cell.lblTime.text = getTextDate(data: data)
+                cell.lblDateTime.text = getTextDate(data: data)
             }else{
-                cell.lblDate.text = getTextDate(data: data)
-                cell.lblTime.text = data.startTime + "-" + data.endTime
+                cell.lblDateTime.text = getTextDate(data: data)
             }
-            
+            cell.avatar.image = UIImage.init(data: data.avatar)
         }else{
             cell.isHidden = true
         }
@@ -161,14 +177,17 @@ class ViewController: UIViewController,FSCalendarDataSource, FSCalendarDelegate,
             self.eventEdit = self.listEventVisible[indexPath.row]
             self.performSegue(withIdentifier: "addEvent", sender: self)
         })
-        editAction.backgroundColor = UIColor.yellow
+        editAction.backgroundColor = UIColor.orange
         
         // action delete
         let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
-            let alert = UIAlertController(title: "", message: "", preferredStyle: UIAlertControllerStyle.alert)
+            let alert = UIAlertController(title: "", message: "Do you want to delete this event", preferredStyle: UIAlertControllerStyle.alert)
             alert.addAction(UIAlertAction(title: "YES", style: UIAlertActionStyle.default, handler: { action in
                 let addEventController = AddEventController()
                 addEventController.saveEvent(event: self.listEventVisible[indexPath.row], isTypeAction: actionTypeOfEvent.delete)
+                self.listEventVisible = self.getEventOfDate(inDate: self.fsCalendar.selectedDate!)
+                self.fsCalendar.reloadData()
+                self.tableView.reloadData()
             }))
             alert.addAction(UIAlertAction(title: "NO", style: UIAlertActionStyle.default, handler: nil))
             self.present(alert, animated: true, completion: nil)

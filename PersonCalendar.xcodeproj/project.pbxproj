@@ -16,6 +16,7 @@
 		690A664D1EE86EAA00718A38 /* UIUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 690A664C1EE86EAA00718A38 /* UIUtils.swift */; };
 		69447E741EED442500106DF7 /* Icon_Event@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69447E721EED442500106DF7 /* Icon_Event@2x.png */; };
 		69447E751EED442500106DF7 /* Icon_Event@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 69447E731EED442500106DF7 /* Icon_Event@3x.png */; };
+		694A13DE1EF176D800D36B14 /* PopupSelectDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 694A13DD1EF176D800D36B14 /* PopupSelectDate.swift */; };
 		FA319B4E1EE595830094F187 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA319B4D1EE595830094F187 /* AppDelegate.swift */; };
 		FA319B501EE595830094F187 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA319B4F1EE595830094F187 /* ViewController.swift */; };
 		FA319B531EE595830094F187 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FA319B511EE595830094F187 /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 		690A664C1EE86EAA00718A38 /* UIUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIUtils.swift; sourceTree = "<group>"; };
 		69447E721EED442500106DF7 /* Icon_Event@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon_Event@2x.png"; sourceTree = "<group>"; };
 		69447E731EED442500106DF7 /* Icon_Event@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon_Event@3x.png"; sourceTree = "<group>"; };
+		694A13DD1EF176D800D36B14 /* PopupSelectDate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopupSelectDate.swift; sourceTree = "<group>"; };
 		8B8126DF3C61A9416F9C011A /* Pods_PersonCalendar.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PersonCalendar.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FA2B7DF91EE5B7710071051E /* PersonCalendar-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "PersonCalendar-Bridging-Header.h"; sourceTree = "<group>"; };
 		FA319B4A1EE595830094F187 /* PersonCalendar.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PersonCalendar.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -225,6 +227,7 @@
 				FA319B4F1EE595830094F187 /* ViewController.swift */,
 				FAD2E0FF1EE6F08300E99FC8 /* EventCell.swift */,
 				690A66411EE86DC500718A38 /* AddEventController.swift */,
+				694A13DD1EF176D800D36B14 /* PopupSelectDate.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -424,6 +427,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				FA319B501EE595830094F187 /* ViewController.swift in Sources */,
+				694A13DE1EF176D800D36B14 /* PopupSelectDate.swift in Sources */,
 				FAD2E1021EE6F8CF00E99FC8 /* EventObject.swift in Sources */,
 				690A66421EE86DC500718A38 /* AddEventController.swift in Sources */,
 				690A664D1EE86EAA00718A38 /* UIUtils.swift in Sources */,

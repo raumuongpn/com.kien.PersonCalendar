@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-class AddEventController: UIViewController {
+class AddEventController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var tfEventName: UITextField!
     @IBOutlet weak var tfNote: UITextView!
@@ -19,7 +19,9 @@ class AddEventController: UIViewController {
     @IBOutlet weak var switchAllDay: UISwitch!
     @IBOutlet weak var imgView: UIImageView!
     
+    let picker = UIImagePickerController()
     let utils = UIUtils()
+    var avatarData = Data.init()
     
     private let userDefaults = UserDefaults.standard
     private let keyUserDefaults: String = "event_list_key"
@@ -42,11 +44,11 @@ class AddEventController: UIViewController {
     }
     
     var eventEdit = EventObject()
-
-
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        picker.delegate = self
         //btn save
         let rightBtn = utils.buildButton(image: UIImage(), title: "Save", colorText: UIColor.colorFromRGB(0x3498db))
         rightBtn.addTarget(self, action: #selector(AddEventController.onClickBtnSave), for: .touchUpInside)
@@ -61,10 +63,29 @@ class AddEventController: UIViewController {
         tfNote.layer.borderColor = UIColor.lightGray.cgColor
         tfNote.layer.cornerRadius = 5
         
+        // config tap imageView
+        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(AddEventController.tapImageView(tapGestureRecognizer:)))
+        imgView.isUserInteractionEnabled = true
+        imgView.addGestureRecognizer(tapGestureRecognizer)
+        
+        //config tap textfield
+        tfStartDate.addTarget(self, action: #selector(AddEventController.openPopupSelectDate(textField:)), for: .touchDown)
+        tfEndDate.addTarget(self, action: #selector(AddEventController.openPopupSelectDate(textField:)), for: .touchDown)
+        
         if eventEdit.eventId != 0 {
             self.navigationItem.title = "Edit Event"
             loadDataToForm()
+        }else{
+            tfStartDate.text = utils.dateFormatter.string(from: Date())
+            tfEndDate.text = utils.dateFormatter.string(from: Date())
+            avatarData = UIImagePNGRepresentation(UIImage.init(named: "Icon_Event.png")!)!
         }
+        
+        // reload page
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(AddEventController.reloadPage(_:)),
+                                               name: NSNotification.Name(rawValue: "selectDate"),
+                                               object: nil)
         
     }
     
@@ -73,10 +94,36 @@ class AddEventController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    // load page
+    func reloadPage(_ notification: Notification){
+        if (notification.name.rawValue == "selectDate") {
+            if notification.userInfo != nil{
+                let userInfo:Dictionary<String,String?> =
+                    notification.userInfo as! Dictionary<String,String?>
+                let selectDate = userInfo["selectDate"]!!
+                let dateOf = userInfo["dateOf"]!!
+                switch dateOf {
+                case "start":
+                    tfStartDate.text = selectDate
+                case "end":
+                    tfEndDate.text = selectDate
+                default:
+                    tfStartDate.text = selectDate
+                    tfEndDate.text = selectDate
+                }
+            }
+        }
+        
+    }
+    
     func onClickBtnSave() {
-        let eventId = eventEdit.eventId == 0 ? self.createEventId() : eventEdit.eventId
-        let eventItem = EventObject.init(eventId: eventId, eventName: tfEventName.text!, startDate: utils.dateFormatter.date(from: tfStartDate.text!)!, endDate: utils.dateFormatter.date(from: tfEndDate.text!)!, startTime: tfStartTime.text!, endTime: tfEndTime.text!, note: tfNote.text!, allDay: switchAllDay.isOn)
-        saveEvent(event: eventItem, isTypeAction: eventEdit.eventId == 0 ? actionTypeOfEvent.save : actionTypeOfEvent.edit)
+        if validateForm() {
+            let eventId = eventEdit.eventId == 0 ? self.createEventId() : eventEdit.eventId
+            let eventItem = EventObject.init(eventId: eventId, eventName: tfEventName.text!, startDate: utils.dateFormatter.date(from: tfStartDate.text!)!, endDate: utils.dateFormatter.date(from: tfEndDate.text!)!, startTime: tfStartTime.text!, endTime: tfEndTime.text!, note: tfNote.text!, allDay: switchAllDay.isOn, avatar: avatarData)
+            saveEvent(event: eventItem, isTypeAction: eventEdit.eventId == 0 ? actionTypeOfEvent.save : actionTypeOfEvent.edit)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addEventOK"), object: nil, userInfo: nil)
+            _ = self.navigationController?.popViewController(animated: true)
+        }
     }
     
     func loadDataToForm(){
@@ -87,6 +134,7 @@ class AddEventController: UIViewController {
         tfStartTime.text = eventEdit.startTime
         tfEndTime.text = eventEdit.endTime
         switchAllDay.isOn = eventEdit.allDay
+        imgView.image = UIImage.init(data: avatarData)
     }
     
     func createEventId() -> Int {
@@ -95,6 +143,98 @@ class AddEventController: UIViewController {
             return (idMax! + 1)
         }
         return 1
+    }
+    
+    func tapImageView(tapGestureRecognizer: UITapGestureRecognizer){
+        let alert = UIAlertController(title: "New Avatar", message: "Choose one image to make avatar for event", preferredStyle: UIAlertControllerStyle.actionSheet)
+        
+        let openCamera = UIAlertAction(title: "Open Camera", style: UIAlertActionStyle.default) { _ in
+            self.openCamera()
+        }
+        let openFolder = UIAlertAction(title: "Open Library Image", style: UIAlertActionStyle.default) { _ in
+            self.openLibPhoto()
+        }
+        let dismiss = UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil)
+        // relate actions to controllers
+        alert.addAction(openCamera)
+        alert.addAction(openFolder)
+        alert.addAction(dismiss)
+        
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func openCamera(){
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
+            picker.allowsEditing = false
+            picker.sourceType = UIImagePickerControllerSourceType.camera
+            picker.cameraCaptureMode = .photo
+            picker.modalPresentationStyle = .fullScreen
+            present(self.picker,animated: true,completion: nil)
+        }
+    }
+    
+    func openLibPhoto(){
+        picker.allowsEditing = true
+        picker.sourceType = .photoLibrary
+        picker.mediaTypes = UIImagePickerController.availableMediaTypes(for: .photoLibrary)!
+        picker.modalPresentationStyle = .pageSheet
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func openPopupSelectDate(textField: UITextField){
+        var selectDate = Date()
+        var dateOf = ""
+        switch textField {
+        case tfStartDate:
+            selectDate = utils.dateFormatter.date(from: tfStartDate.text!)!
+            dateOf = "start"
+        case tfEndDate:
+            selectDate = utils.dateFormatter.date(from: tfEndDate.text!)!
+            dateOf = "end"
+        default:
+            selectDate = Date()
+        }
+        
+        
+        let popup = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "PopupSelectDate") as! PopupSelectDate
+        popup.selectDate = selectDate
+        popup.dateOf = dateOf
+        self.addChildViewController(popup)
+        popup.view.frame = self.view.frame
+        self.view.addSubview(popup.view)
+        popup.didMove(toParentViewController: self)
+    }
+    
+    //MARK: - Delegates
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        var chosenImage = UIImage()
+        chosenImage = info[UIImagePickerControllerOriginalImage] as! UIImage
+        imgView.contentMode = .scaleAspectFit
+        imgView.image = chosenImage
+        avatarData = UIImagePNGRepresentation(chosenImage)!
+        dismiss(animated:true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func validateForm() -> Bool {
+        if tfEventName.text == "" {
+            showAlert(msg: "Event name is required")
+            return false
+        }
+        if utils.dateFormatter.date(from: tfStartDate.text!)?.compare(utils.dateFormatter.date(from: tfEndDate.text!)!) == .orderedDescending {
+            showAlert(msg: "Date time is wrong")
+            return false
+        }
+        return true
+    }
+    
+    func showAlert(msg: String){
+        let alert = UIAlertController(title: "", message: msg, preferredStyle: UIAlertControllerStyle.alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
     
     

@@ -18,9 +18,10 @@ class EventObject: NSObject, NSCoding {
     var endTime: String
     var note: String
     var allDay: Bool
+    var avatar: Data = UIImagePNGRepresentation(UIImage.init(named: "Icon_Event.png")!)!
     
     
-    init(eventId: Int, eventName: String, startDate: Date, endDate: Date, startTime: String, endTime: String, note: String, allDay: Bool) {
+    init(eventId: Int, eventName: String, startDate: Date, endDate: Date, startTime: String, endTime: String, note: String, allDay: Bool, avatar: Data) {
         self.eventId = eventId
         self.eventName = eventName
         self.startDate = startDate
@@ -29,10 +30,11 @@ class EventObject: NSObject, NSCoding {
         self.endTime = endTime
         self.note = note
         self.allDay = allDay
+        self.avatar = avatar
     }
     
     convenience override init(){
-        self.init(eventId: 0, eventName: "", startDate: Date(), endDate: Date(), startTime: "", endTime: "", note: "", allDay: false)
+        self.init(eventId: 0, eventName: "", startDate: Date(), endDate: Date(), startTime: "", endTime: "", note: "", allDay: false, avatar: Data.init())
     }
 //    override init() {
 //        code
@@ -47,7 +49,8 @@ class EventObject: NSObject, NSCoding {
         let endTime = aDecoder.decodeObject(forKey: "endTime") as! String
         let note = aDecoder.decodeObject(forKey: "note") as! String
         let allDay = aDecoder.decodeBool(forKey: "allDay")
-        self.init(eventId: eventId, eventName: eventName, startDate: startDate, endDate: endDate, startTime: startTime, endTime: endTime, note: note, allDay: allDay)
+        let avatar = aDecoder.decodeObject(forKey: "avatar") as! Data
+        self.init(eventId: eventId, eventName: eventName, startDate: startDate, endDate: endDate, startTime: startTime, endTime: endTime, note: note, allDay: allDay, avatar: avatar)
     }
     
     func encode(with aCoder: NSCoder) {
@@ -58,7 +61,8 @@ class EventObject: NSObject, NSCoding {
         aCoder.encode(startTime, forKey: "startTime")
         aCoder.encode(endTime, forKey: "endTime")
         aCoder.encode(note, forKey: "note")
-        aCoder.encode(allDay, forKey: "allDay")		        
+        aCoder.encode(allDay, forKey: "allDay")
+        aCoder.encode(avatar, forKey: "avatar")
     }
     
     func isEqual(object: AnyObject?) -> Bool {
